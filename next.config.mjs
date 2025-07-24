@@ -1,19 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // PWA Configuration
-  experimental: {
-    optimizeCss: true,
-  },
-  
   // Image Optimization
   images: {
     formats: ['image/webp', 'image/avif'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    minimumCacheTTL: 31536000, // 1 year
+    minimumCacheTTL: 60,
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
-    unoptimized: true, // Added from updates
   },
   
   // Performance Optimizations
@@ -74,21 +68,8 @@ const nextConfig = {
     ]
   },
   
-  // Webpack optimizations
-  webpack: (config, { dev, isServer }) => {
-    if (!dev && !isServer) {
-      config.optimization.splitChunks.chunks = 'all'
-      config.optimization.splitChunks.cacheGroups = {
-        ...config.optimization.splitChunks.cacheGroups,
-        commons: {
-          name: 'commons',
-          chunks: 'all',
-          minChunks: 2,
-        },
-      }
-    }
-    return config
-  },
+  // Output configuration for Vercel
+  output: 'standalone',
   
   // ESLint and TypeScript configurations
   eslint: {

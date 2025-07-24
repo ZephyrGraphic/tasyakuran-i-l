@@ -13,15 +13,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Lutfhi & Indri" }],
   creator: "Lutfhi & Indri",
   publisher: "Wedding Invitation",
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
   metadataBase: new URL("https://tasyakuran-indri-luthfi.vercel.app"),
-  alternates: {
-    canonical: "/",
-  },
   openGraph: {
     title: "Tasyakuran Pernikahan Lutfhi & Indri",
     description:
@@ -46,42 +38,8 @@ export const metadata: Metadata = {
     description:
       "Dengan penuh sukacita, kami mengundang Bapak/Ibu/Saudara/i untuk hadir dalam acara Tasyakuran Pernikahan Lutfhi Farhan Maulana & Indri Ramdani pada Kamis, 31 Juli 2025 di Villa D'LAFISHA, Sukabumi.",
     images: ["https://tasyakuran-indri-luthfi.vercel.app/thumbnail-il.jpg"],
-    creator: "@lutfhi_indri",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
-  verification: {
-    google: "your-google-verification-code",
-  },
-  icons: {
-    icon: [
-      { url: "/favicon.png", sizes: "32x32", type: "image/png" },
-      { url: "/favicon.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon.png", sizes: "192x192", type: "image/png" },
-      { url: "/favicon.png", sizes: "512x512", type: "image/png" },
-    ],
-    apple: [
-      { url: "/favicon.png", sizes: "180x180", type: "image/png" },
-      { url: "/favicon.png", sizes: "152x152", type: "image/png" },
-      { url: "/favicon.png", sizes: "120x120", type: "image/png" },
-    ],
-    shortcut: "/favicon.png",
   },
   manifest: "/manifest.json",
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "default",
-    title: "Lutfhi & Indri",
-  },
 }
 
 export default function RootLayout({
@@ -92,36 +50,16 @@ export default function RootLayout({
   return (
     <html lang="id">
       <head>
-        {/* PWA Meta Tags */}
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/favicon.png" sizes="any" />
         <link rel="apple-touch-icon" href="/favicon.png" />
         <meta name="theme-color" content="#143a45" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-
-        {/* Apple PWA Meta Tags */}
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Lutfhi & Indri" />
-
-        {/* WhatsApp Specific Meta Tags */}
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:image:type" content="image/jpeg" />
-        <meta property="og:image:alt" content="Tasyakuran Pernikahan Lutfhi & Indri - 31 Juli 2025" />
-        <meta property="og:image" content="https://tasyakuran-indri-luthfi.vercel.app/thumbnail-il.jpg" />
-
-        {/* Additional Meta Tags for Better Sharing */}
-        <meta name="author" content="Lutfhi & Indri" />
-        <meta name="copyright" content="Lutfhi & Indri Wedding 2025" />
-        <meta name="language" content="Indonesian" />
-        <meta name="revisit-after" content="1 days" />
-
-        {/* Preload Critical Resources */}
         <link rel="preload" href="/images/hero-couple.jpg" as="image" />
         <link rel="preload" href="/aminpalingserius.mp3" as="audio" />
-        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className={inter.className}>
         {children}
