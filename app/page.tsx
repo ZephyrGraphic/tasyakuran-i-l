@@ -17,6 +17,7 @@ import {
   ExternalLink,
   UserCheck,
   Share2,
+  Download,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
@@ -34,6 +35,9 @@ export default function WeddingInvitation() {
   })
   const [selectedPhoto, setSelectedPhoto] = useState<number | null>(null)
   const [isTransitioning, setIsTransitioning] = useState(false)
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null)
+  const [showInstallPrompt, setShowInstallPrompt] = useState(false)
+  const [isOnline, setIsOnline] = useState(true)
 
   const audioRef = useRef<HTMLAudioElement>(null)
 
@@ -84,6 +88,31 @@ export default function WeddingInvitation() {
     }, 1000)
 
     return () => clearInterval(timer)
+  }, [])
+
+  useEffect(() => {
+    const handler = (e: any) => {
+      e.preventDefault()
+      setDeferredPrompt(e)
+      setShowInstallPrompt(true)
+    }
+
+    window.addEventListener("beforeinstallprompt", handler)
+
+    return () => window.removeEventListener("beforeinstallprompt", handler)
+  }, [])
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true)
+    const handleOffline = () => setIsOnline(false)
+
+    window.addEventListener("online", handleOnline)
+    window.addEventListener("offline", handleOffline)
+
+    return () => {
+      window.removeEventListener("online", handleOnline)
+      window.removeEventListener("offline", handleOffline)
+    }
   }, [])
 
   const openInvitation = () => {
@@ -154,6 +183,18 @@ export default function WeddingInvitation() {
     }
   }
 
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) return
+
+    deferredPrompt.prompt()
+    const { outcome } = await deferredPrompt.userChoice
+
+    if (outcome === "accepted") {
+      setDeferredPrompt(null)
+      setShowInstallPrompt(false)
+    }
+  }
+
   const renderSection = () => {
     switch (activeSection) {
       case "home":
@@ -176,13 +217,27 @@ export default function WeddingInvitation() {
   if (!isOpened) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-teal-50 to-slate-50 flex items-center justify-center p-4 relative overflow-hidden">
+        {!isOnline && (
+          <div className="fixed top-0 left-0 right-0 bg-red-600 text-white text-center py-2 z-50">
+            <span className="text-sm">Mode Offline - Beberapa fitur mungkin terbatas</span>
+          </div>
+        )}
         {/* Background Audio */}
         <audio ref={audioRef} loop>
-          <source src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/aminpalingserius-fxje76yUJ5IsjQHiVv7fWzsxI6ayXf.mp3" type="audio/mpeg" />
+          <source src="/aminpalingserius.mp3" type="audio/mpeg" />
         </audio>
 
         <div className="absolute inset-0">
-          <Image src="/images/hero-couple.jpg" alt="Lutfhi & Indri" fill className="object-cover" priority />
+          <Image
+            src="/images/hero-couple.jpg"
+            alt="Lutfhi & Indri"
+            fill
+            className="object-cover"
+            priority
+            quality={85}
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+          />
           <div className="absolute inset-0 bg-black/40" />
         </div>
 
@@ -238,9 +293,14 @@ export default function WeddingInvitation() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-teal-50 to-slate-50 pb-20">
+      {!isOnline && (
+        <div className="fixed top-0 left-0 right-0 bg-red-600 text-white text-center py-2 z-50">
+          <span className="text-sm">Mode Offline - Beberapa fitur mungkin terbatas</span>
+        </div>
+      )}
       {/* Background Audio */}
       <audio ref={audioRef} loop>
-        <source src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/aminpalingserius-fxje76yUJ5IsjQHiVv7fWzsxI6ayXf.mp3" type="audio/mpeg" />
+        <source src="/aminpalingserius.mp3" type="audio/mpeg" />
       </audio>
 
       {/* Section Content with Transition */}
@@ -265,6 +325,15 @@ export default function WeddingInvitation() {
         >
           <Share2 className="w-6 h-6" />
         </button>
+        {showInstallPrompt && (
+          <button
+            onClick={handleInstallClick}
+            className="bg-green-600 hover:bg-green-700 text-white p-3 rounded-full shadow-lg transform hover:scale-110 transition-all duration-300"
+            title="Install App"
+          >
+            <Download className="w-6 h-6" />
+          </button>
+        )}
       </div>
 
       {/* Enhanced Bottom Navigation */}
@@ -370,6 +439,9 @@ export default function WeddingInvitation() {
               width={800}
               height={600}
               className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+              loading="eager"
+              quality={80}
+              sizes="(max-width: 768px) 100vw, 800px"
             />
 
             {/* Photo counter */}
@@ -387,7 +459,15 @@ function HomeSection({ guestName }: { guestName: string }) {
   return (
     <div className="min-h-screen flex items-center justify-center p-6 relative">
       <div className="absolute inset-0">
-        <Image src="/images/hero-couple.jpg" alt="Lutfhi & Indri" fill className="object-cover" />
+        <Image
+          src="/images/hero-couple.jpg"
+          alt="Lutfhi & Indri"
+          fill
+          className="object-cover"
+          quality={85}
+          placeholder="blur"
+          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-black/40" />
       </div>
 
@@ -471,7 +551,15 @@ function CoupleSection() {
             <div className="relative w-48 h-48 mx-auto">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-200 to-purple-200 rounded-full transform -rotate-6"></div>
               <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-white shadow-xl">
-                <Image src="/images/luthfi.jpg" alt="Lutfhi Farhan Maulana" fill className="object-cover" />
+                <Image
+                  src="/images/luthfi.jpg"
+                  alt="Lutfhi Farhan Maulana"
+                  fill
+                  className="object-cover"
+                  quality={80}
+                  placeholder="blur"
+                  blurDataURL="data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+                />
               </div>
               <div className="absolute -bottom-2 -right-2 w-12 h-12 bg-gradient-to-r from-primary-600 to-secondary-500 rounded-full flex items-center justify-center border-4 border-white">
                 <Users className="w-6 h-6 text-white" />
@@ -502,7 +590,15 @@ function CoupleSection() {
             <div className="relative w-48 h-48 mx-auto">
               <div className="absolute inset-0 bg-gradient-to-br from-cyan-200 to-teal-200 rounded-full transform rotate-6"></div>
               <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-white shadow-xl">
-                <Image src="/images/indri.jpg" alt="Indri Ramdani" fill className="object-cover" />
+                <Image
+                  src="/images/indri.jpg"
+                  alt="Indri Ramdani"
+                  fill
+                  className="object-cover"
+                  quality={80}
+                  placeholder="blur"
+                  blurDataURL="data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+                />
               </div>
               <div className="absolute -bottom-2 -left-2 w-12 h-12 bg-gradient-to-r from-secondary-500 to-primary-600 rounded-full flex items-center justify-center border-4 border-white">
                 <Heart className="w-6 h-6 text-white" />
@@ -680,6 +776,9 @@ function GallerySection({
                   alt={`Wedding Photo ${index + 1}`}
                   fill
                   className="object-cover hover:scale-110 transition-transform duration-500"
+                  loading={index < 4 ? "eager" : "lazy"}
+                  quality={80}
+                  sizes="(max-width: 768px) 50vw, 33vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 hover:opacity-100 transition-all duration-300 flex items-center justify-center">
                   <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">

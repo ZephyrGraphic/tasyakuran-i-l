@@ -1,0 +1,35 @@
+{
+  "name": "Tasyakuran Pernikahan Lutfhi & Indri",
+  "short_name": "Lutfhi & Indri",
+  "description": "Undangan Digital Tasyakuran Pernikahan Lutfhi Farhan Maulana & Indri Ramdani - 31 Juli 2025",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#143a45",
+  "theme_color": "#143a45",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "id",
+  "categories": ["lifestyle", "social"],
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/thumbnail-il.jpg",
+      "sizes": "1200x630",
+      "type": "image/jpeg",
+      "form_factor": "wide"
+    }
+  ]
+}
