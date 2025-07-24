@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef } from "react";
 import {
   Calendar,
   Clock,
@@ -18,28 +18,28 @@ import {
   UserCheck,
   Share2,
   Download,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import Image from "next/image"
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 export default function WeddingInvitation() {
-  const [isOpened, setIsOpened] = useState(false)
-  const [activeSection, setActiveSection] = useState("home")
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [guestName, setGuestName] = useState("")
+  const [isOpened, setIsOpened] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [guestName, setGuestName] = useState("");
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
     minutes: 0,
     seconds: 0,
-  })
-  const [selectedPhoto, setSelectedPhoto] = useState<number | null>(null)
-  const [isTransitioning, setIsTransitioning] = useState(false)
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null)
-  const [showInstallPrompt, setShowInstallPrompt] = useState(false)
-  const [isOnline, setIsOnline] = useState(true)
+  });
+  const [selectedPhoto, setSelectedPhoto] = useState<number | null>(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [showInstallPrompt, setShowInstallPrompt] = useState(false);
+  const [isOnline, setIsOnline] = useState(true);
 
-  const audioRef = useRef<HTMLAudioElement>(null)
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   const galleryPhotos = [
     "/images/gallery-1.jpg",
@@ -51,186 +51,203 @@ export default function WeddingInvitation() {
     "/images/hero-couple.jpg",
     "/images/couple-white-ceremony.jpg",
     "/images/couple-white-outdoor.jpg",
-  ]
+  ];
 
   // Get guest name from URL parameters
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search)
-    const toParam = urlParams.get("to")
+    const urlParams = new URLSearchParams(window.location.search);
+    const toParam = urlParams.get("to");
 
     if (toParam) {
-      const decodedName = decodeURIComponent(toParam)
-      setGuestName(decodedName)
+      const decodedName = decodeURIComponent(toParam);
+      setGuestName(decodedName);
     } else {
-      setGuestName("Tamu Undangan")
+      setGuestName("Tamu Undangan");
     }
-  }, [])
+  }, []);
 
   // Countdown timer
   useEffect(() => {
-    const targetDate = new Date("2025-07-31T09:00:00").getTime()
+    const targetDate = new Date("2025-07-31T09:00:00").getTime();
 
     const timer = setInterval(() => {
-      const now = new Date().getTime()
-      const difference = targetDate - now
+      const now = new Date().getTime();
+      const difference = targetDate - now;
 
-      const days = Math.floor(difference / (1000 * 60 * 60 * 24))
-      const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60))
-      const seconds = Math.floor((difference % (1000 * 60)) / 1000)
+      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+      const hours = Math.floor(
+        (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      );
+      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
-      setTimeLeft({ days, hours, minutes, seconds })
+      setTimeLeft({ days, hours, minutes, seconds });
 
       if (difference < 0) {
-        clearInterval(timer)
-        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 })
+        clearInterval(timer);
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
       }
-    }, 1000)
+    }, 1000);
 
-    return () => clearInterval(timer)
-  }, [])
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     const handler = (e: any) => {
-      e.preventDefault()
-      setDeferredPrompt(e)
-      setShowInstallPrompt(true)
-    }
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setShowInstallPrompt(true);
+    };
 
-    window.addEventListener("beforeinstallprompt", handler)
+    window.addEventListener("beforeinstallprompt", handler);
 
-    return () => window.removeEventListener("beforeinstallprompt", handler)
-  }, [])
+    return () => window.removeEventListener("beforeinstallprompt", handler);
+  }, []);
 
   useEffect(() => {
-    const handleOnline = () => setIsOnline(true)
-    const handleOffline = () => setIsOnline(false)
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
 
-    window.addEventListener("online", handleOnline)
-    window.addEventListener("offline", handleOffline)
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
     return () => {
-      window.removeEventListener("online", handleOnline)
-      window.removeEventListener("offline", handleOffline)
-    }
-  }, [])
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
 
   const openInvitation = () => {
-    setIsOpened(true)
-    setIsPlaying(true)
-    setActiveSection("home")
+    setIsOpened(true);
+    setIsPlaying(true);
+    setActiveSection("home");
 
     // Start playing music
     if (audioRef.current) {
       audioRef.current.play().catch(() => {
         // Handle autoplay restrictions
-        console.log("Autoplay prevented")
-      })
+        console.log("Autoplay prevented");
+      });
     }
-  }
+  };
 
   const toggleMusic = () => {
     if (audioRef.current) {
       if (isPlaying) {
-        audioRef.current.pause()
+        audioRef.current.pause();
       } else {
         audioRef.current.play().catch(() => {
-          console.log("Play prevented")
-        })
+          console.log("Play prevented");
+        });
       }
-      setIsPlaying(!isPlaying)
+      setIsPlaying(!isPlaying);
     }
-  }
+  };
 
   const changeSection = (newSection: string) => {
-    if (newSection === activeSection) return
+    if (newSection === activeSection) return;
 
-    setIsTransitioning(true)
+    setIsTransitioning(true);
     setTimeout(() => {
-      setActiveSection(newSection)
-      setIsTransitioning(false)
-    }, 150)
-  }
+      setActiveSection(newSection);
+      setIsTransitioning(false);
+    }, 150);
+  };
 
   const saveToCalendar = () => {
-    const startDate = "20250731T020000Z" // 09:00 WIB = 02:00 UTC
-    const endDate = "20250731T080000Z" // 15:00 WIB = 08:00 UTC
-    const title = "Tasyakuran Pernikahan Lutfhi & Indri"
-    const details = "Villa D'LAFISHA, Kp. Cijagung Desa Gede Pangrango RT. 27 RW. 07 Kab. Sukabumi"
+    const startDate = "20250731T020000Z"; // 09:00 WIB = 02:00 UTC
+    const endDate = "20250731T080000Z"; // 15:00 WIB = 08:00 UTC
+    const title = "Tasyakuran Pernikahan Luthfi & Indri";
+    const details =
+      "Villa D'LAFISHA, Kp. Cijagung Desa Gede Pangrango RT. 27 RW. 07 Kab. Sukabumi";
 
-    const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${startDate}/${endDate}&details=${encodeURIComponent(details)}`
+    const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
+      title
+    )}&dates=${startDate}/${endDate}&details=${encodeURIComponent(details)}`;
 
-    window.open(googleCalendarUrl, "_blank")
-  }
+    window.open(googleCalendarUrl, "_blank");
+  };
 
   const shareInvitation = async () => {
     const shareData = {
-      title: "Tasyakuran Pernikahan Lutfhi & Indri",
+      title: "Tasyakuran Pernikahan Luthfi & Indri",
       text: "Dengan penuh sukacita, kami mengundang Anda untuk hadir dalam acara Tasyakuran Pernikahan kami pada 31 Juli 2025",
       url: window.location.href,
-    }
+    };
 
     try {
       if (navigator.share) {
-        await navigator.share(shareData)
+        await navigator.share(shareData);
       } else {
         // Fallback: copy to clipboard
-        await navigator.clipboard.writeText(window.location.href)
-        alert("Link undangan telah disalin!")
+        await navigator.clipboard.writeText(window.location.href);
+        alert("Link undangan telah disalin!");
       }
     } catch (err) {
-      console.log("Error sharing:", err)
+      console.log("Error sharing:", err);
     }
-  }
+  };
 
   const handleInstallClick = async () => {
-    if (!deferredPrompt) return
+    if (!deferredPrompt) return;
 
-    deferredPrompt.prompt()
-    const { outcome } = await deferredPrompt.userChoice
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
 
     if (outcome === "accepted") {
-      setDeferredPrompt(null)
-      setShowInstallPrompt(false)
+      setDeferredPrompt(null);
+      setShowInstallPrompt(false);
     }
-  }
+  };
 
   const renderSection = () => {
     switch (activeSection) {
       case "home":
-        return <HomeSection guestName={guestName} />
+        return <HomeSection guestName={guestName} />;
       case "couple":
-        return <CoupleSection />
+        return <CoupleSection />;
       case "event":
-        return <EventSection timeLeft={timeLeft} saveToCalendar={saveToCalendar} />
+        return (
+          <EventSection timeLeft={timeLeft} saveToCalendar={saveToCalendar} />
+        );
       case "gallery":
-        return <GallerySection photos={galleryPhotos} setSelectedPhoto={setSelectedPhoto} />
+        return (
+          <GallerySection
+            photos={galleryPhotos}
+            setSelectedPhoto={setSelectedPhoto}
+          />
+        );
       case "location":
-        return <LocationSection />
+        return <LocationSection />;
       case "co-invitation":
-        return <CoInvitationSection />
+        return <CoInvitationSection />;
       default:
-        return <HomeSection guestName={guestName} />
+        return <HomeSection guestName={guestName} />;
     }
-  }
+  };
 
   if (!isOpened) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-teal-50 to-slate-50 flex items-center justify-center p-4 relative overflow-hidden">
         {!isOnline && (
           <div className="fixed top-0 left-0 right-0 bg-red-600 text-white text-center py-2 z-50">
-            <span className="text-sm">Mode Offline - Beberapa fitur mungkin terbatas</span>
+            <span className="text-sm">
+              Mode Offline - Beberapa fitur mungkin terbatas
+            </span>
           </div>
         )}
         {/* Background Audio */}
         <audio ref={audioRef} loop>
-          <source src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/aminpalingserius-fxje76yUJ5IsjQHiVv7fWzsxI6ayXf.mp3" type="audio/mpeg" />
+          <source
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/aminpalingserius-fxje76yUJ5IsjQHiVv7fWzsxI6ayXf.mp3"
+            type="audio/mpeg"
+          />
         </audio>
 
         <div className="absolute inset-0">
           <Image
             src="/images/hero-couple.jpg"
-            alt="Lutfhi & Indri"
+            alt="Luthfi & Indri"
             fill
             className="object-cover"
             priority
@@ -265,9 +282,11 @@ export default function WeddingInvitation() {
               </div>
             </div>
 
-            <p className="text-lg font-light tracking-wider">Tasyakuran Ngunduh Mantu</p>
+            <p className="text-lg font-light tracking-wider">
+              Tasyakuran Ngunduh Mantu
+            </p>
             <h1 className="text-5xl font-bold font-serif mb-8 bg-gradient-to-r from-white to-cyan-200 bg-clip-text text-transparent">
-              Lutfhi & Indri
+              Luthfi & Indri
             </h1>
 
             <div className="space-y-2 mb-8">
@@ -288,24 +307,31 @@ export default function WeddingInvitation() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-teal-50 to-slate-50 pb-20">
       {!isOnline && (
         <div className="fixed top-0 left-0 right-0 bg-red-600 text-white text-center py-2 z-50">
-          <span className="text-sm">Mode Offline - Beberapa fitur mungkin terbatas</span>
+          <span className="text-sm">
+            Mode Offline - Beberapa fitur mungkin terbatas
+          </span>
         </div>
       )}
       {/* Background Audio */}
       <audio ref={audioRef} loop>
-        <source src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/aminpalingserius-fxje76yUJ5IsjQHiVv7fWzsxI6ayXf.mp3" type="audio/mpeg" />
+        <source
+          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/aminpalingserius-fxje76yUJ5IsjQHiVv7fWzsxI6ayXf.mp3"
+          type="audio/mpeg"
+        />
       </audio>
 
       {/* Section Content with Transition */}
       <div
-        className={`min-h-screen transition-all duration-300 ${isTransitioning ? "opacity-0 scale-95" : "opacity-100 scale-100"}`}
+        className={`min-h-screen transition-all duration-300 ${
+          isTransitioning ? "opacity-0 scale-95" : "opacity-100 scale-100"
+        }`}
       >
         {renderSection()}
       </div>
@@ -316,7 +342,11 @@ export default function WeddingInvitation() {
           onClick={toggleMusic}
           className="bg-primary-600 hover:bg-primary-700 text-white p-3 rounded-full shadow-lg transform hover:scale-110 transition-all duration-300"
         >
-          {isPlaying ? <Music className="w-6 h-6" /> : <MusicOff className="w-6 h-6" />}
+          {isPlaying ? (
+            <Music className="w-6 h-6" />
+          ) : (
+            <MusicOff className="w-6 h-6" />
+          )}
         </button>
 
         <button
@@ -419,14 +449,22 @@ export default function WeddingInvitation() {
           </button>
 
           <button
-            onClick={() => setSelectedPhoto(selectedPhoto > 0 ? selectedPhoto - 1 : galleryPhotos.length - 1)}
+            onClick={() =>
+              setSelectedPhoto(
+                selectedPhoto > 0 ? selectedPhoto - 1 : galleryPhotos.length - 1
+              )
+            }
             className="absolute left-4 text-white hover:text-gray-300 z-10 bg-black/50 rounded-full p-2 backdrop-blur-sm"
           >
             <ChevronLeft className="w-8 h-8" />
           </button>
 
           <button
-            onClick={() => setSelectedPhoto(selectedPhoto < galleryPhotos.length - 1 ? selectedPhoto + 1 : 0)}
+            onClick={() =>
+              setSelectedPhoto(
+                selectedPhoto < galleryPhotos.length - 1 ? selectedPhoto + 1 : 0
+              )
+            }
             className="absolute right-4 text-white hover:text-gray-300 z-10 bg-black/50 rounded-full p-2 backdrop-blur-sm"
           >
             <ChevronRight className="w-8 h-8" />
@@ -452,7 +490,7 @@ export default function WeddingInvitation() {
         </div>
       )}
     </div>
-  )
+  );
 }
 
 function HomeSection({ guestName }: { guestName: string }) {
@@ -461,7 +499,7 @@ function HomeSection({ guestName }: { guestName: string }) {
       <div className="absolute inset-0">
         <Image
           src="/images/hero-couple.jpg"
-          alt="Lutfhi & Indri"
+          alt="Luthfi & Indri"
           fill
           className="object-cover"
           quality={85}
@@ -495,31 +533,40 @@ function HomeSection({ guestName }: { guestName: string }) {
             </div>
           </div>
 
-          <p className="text-lg font-light tracking-wider opacity-90">Tasyakuran Ngunduh Mantu</p>
+          <p className="text-lg font-light tracking-wider opacity-90">
+            Tasyakuran Ngunduh Mantu
+          </p>
           <h1 className="text-5xl font-bold font-serif mb-8 bg-gradient-to-r from-white to-cyan-200 bg-clip-text text-transparent">
-            Lutfhi & Indri
+            Luthfi & Indri
           </h1>
 
           {guestName && guestName !== "Tamu Undangan" && (
             <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 mb-6 border border-white/30">
-              <p className="text-sm mb-2 opacity-90">Kepada Yth. Bapak/Ibu/Saudara/i</p>
+              <p className="text-sm mb-2 opacity-90">
+                Kepada Yth. Bapak/Ibu/Saudara/i
+              </p>
               <p className="font-medium text-lg">{guestName}</p>
             </div>
           )}
 
           <div className="bg-white/20 backdrop-blur-sm rounded-lg p-6 border border-white/30">
-            <p className="text-cyan-200 font-serif text-lg mb-4">Assalamu'alaikum Warahmatullahi Wabarakatuh</p>
-            <p className="text-white text-sm leading-relaxed mb-4 opacity-90">
-              Maha suci Allah SWT yang telah menciptakan makhluk-Nya berpasang-pasangan. Ya Allah, semoga ridho-Mu
-              tercurah mengiringi Tasyakuran Pernikahan putra-putri kami
+            <p className="text-cyan-200 font-serif text-lg mb-4">
+              Assalamu'alaikum Warahmatullahi Wabarakatuh
             </p>
-            <p className="text-cyan-200 italic">"Dan dijadikan-Nya diantaramu rasa kasih dan sayang"</p>
+            <p className="text-white text-sm leading-relaxed mb-4 opacity-90">
+              Maha suci Allah SWT yang telah menciptakan makhluk-Nya
+              berpasang-pasangan. Ya Allah, semoga ridho-Mu tercurah mengiringi
+              Tasyakuran Pernikahan putra-putri kami
+            </p>
+            <p className="text-cyan-200 italic">
+              "Dan dijadikan-Nya diantaramu rasa kasih dan sayang"
+            </p>
             <p className="text-cyan-300 text-sm mt-2">- QS. Ar-Rum: 21 -</p>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function CoupleSection() {
@@ -541,7 +588,9 @@ function CoupleSection() {
           <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-primary-600 to-secondary-500 rounded-full flex items-center justify-center">
             <Heart className="w-8 h-8 text-white" />
           </div>
-          <h2 className="text-4xl font-bold text-primary-600 font-serif">Kedua Mempelai</h2>
+          <h2 className="text-4xl font-bold text-primary-600 font-serif">
+            Kedua Mempelai
+          </h2>
           <div className="w-24 h-1 bg-gradient-to-r from-primary-600 to-secondary-500 mx-auto mt-4 rounded-full"></div>
         </div>
 
@@ -553,7 +602,7 @@ function CoupleSection() {
               <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-white shadow-xl">
                 <Image
                   src="/images/luthfi.jpg"
-                  alt="Lutfhi Farhan Maulana"
+                  alt="Luthfi Farhan Maulana"
                   fill
                   className="object-cover"
                   quality={80}
@@ -567,11 +616,15 @@ function CoupleSection() {
             </div>
 
             <div className="space-y-3">
-              <h3 className="text-3xl font-bold text-primary-600 font-serif">Lutfhi Farhan Maulana, S.Pd.</h3>
+              <h3 className="text-3xl font-bold text-primary-600 font-serif">
+                Luthfi Farhan Maulana, S.Pd.
+              </h3>
               <p className="text-gray-700 leading-relaxed">
                 Putra pertama dari
                 <br />
-                <span className="font-medium">Bapak Asep Badrutamam & Ibu Heni Suarni</span>
+                <span className="font-medium">
+                  Bapak Asep Badrutamam & Ibu Heni Suarni
+                </span>
               </p>
             </div>
           </div>
@@ -606,26 +659,30 @@ function CoupleSection() {
             </div>
 
             <div className="space-y-3">
-              <h3 className="text-3xl font-bold text-primary-600 font-serif">Indri Ramdani, S.Pd.</h3>
+              <h3 className="text-3xl font-bold text-primary-600 font-serif">
+                Indri Ramdani, S.Pd.
+              </h3>
               <p className="text-gray-700 leading-relaxed">
                 Putri kedua dari
                 <br />
-                <span className="font-medium">Bapak Isap Saprudin & Ibu Uu Yuningsih</span>
+                <span className="font-medium">
+                  Bapak Isap Saprudin & Ibu Uu Yuningsih
+                </span>
               </p>
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function EventSection({
   timeLeft,
   saveToCalendar,
 }: {
-  timeLeft: { days: number; hours: number; minutes: number; seconds: number }
-  saveToCalendar: () => void
+  timeLeft: { days: number; hours: number; minutes: number; seconds: number };
+  saveToCalendar: () => void;
 }) {
   return (
     <div className="min-h-screen flex items-center justify-center p-6 bg-white relative overflow-hidden">
@@ -645,7 +702,9 @@ function EventSection({
           <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-primary-600 to-secondary-500 rounded-full flex items-center justify-center">
             <Calendar className="w-8 h-8 text-white" />
           </div>
-          <h2 className="text-4xl font-bold text-primary-600 font-serif">Detail Acara</h2>
+          <h2 className="text-4xl font-bold text-primary-600 font-serif">
+            Detail Acara
+          </h2>
           <div className="w-24 h-1 bg-gradient-to-r from-primary-600 to-secondary-500 mx-auto mt-4 rounded-full"></div>
         </div>
 
@@ -660,7 +719,9 @@ function EventSection({
             </div>
             <div className="space-y-2 text-gray-700">
               <p className="font-medium">Minggu, 13 Juli 2025</p>
-              <p className="text-sm italic text-green-600">(Telah Dilaksanakan)</p>
+              <p className="text-sm italic text-green-600">
+                (Telah Dilaksanakan)
+              </p>
             </div>
           </div>
 
@@ -670,7 +731,9 @@ function EventSection({
               <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center mr-3">
                 <Calendar className="w-6 h-6 text-white" />
               </div>
-              <h3 className="text-xl font-bold text-purple-800">Tasyakuran Pernikahan</h3>
+              <h3 className="text-xl font-bold text-purple-800">
+                Tasyakuran Pernikahan
+              </h3>
             </div>
             <div className="space-y-3 text-gray-700">
               <div className="flex items-center">
@@ -697,7 +760,9 @@ function EventSection({
 
           {/* Countdown Timer */}
           <div className="bg-gradient-to-r from-cyan-100 to-teal-100 rounded-2xl p-6 text-center backdrop-blur-sm bg-white/80 shadow-lg">
-            <h3 className="text-xl font-bold text-gray-800 mb-4">Menuju Hari Bahagia</h3>
+            <h3 className="text-xl font-bold text-gray-800 mb-4">
+              Menuju Hari Bahagia
+            </h3>
             <div className="grid grid-cols-4 gap-3">
               {[
                 { value: timeLeft.days, label: "Hari" },
@@ -709,8 +774,12 @@ function EventSection({
                   key={index}
                   className="bg-white rounded-lg p-3 shadow-md transform hover:scale-105 transition-all duration-300"
                 >
-                  <div className="text-2xl font-bold text-secondary-500">{item.value}</div>
-                  <div className="text-xs text-gray-600 font-medium">{item.label}</div>
+                  <div className="text-2xl font-bold text-secondary-500">
+                    {item.value}
+                  </div>
+                  <div className="text-xs text-gray-600 font-medium">
+                    {item.label}
+                  </div>
                 </div>
               ))}
             </div>
@@ -729,15 +798,15 @@ function EventSection({
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function GallerySection({
   photos,
   setSelectedPhoto,
 }: {
-  photos: string[]
-  setSelectedPhoto: (index: number) => void
+  photos: string[];
+  setSelectedPhoto: (index: number) => void;
 }) {
   return (
     <div className="min-h-screen p-6 bg-gradient-to-br from-purple-50 to-rose-50 relative overflow-hidden">
@@ -757,7 +826,9 @@ function GallerySection({
           <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-primary-600 to-secondary-500 rounded-full flex items-center justify-center">
             <Camera className="w-8 h-8 text-white" />
           </div>
-          <h2 className="text-4xl font-bold text-primary-600 font-serif">Galeri Foto</h2>
+          <h2 className="text-4xl font-bold text-primary-600 font-serif">
+            Galeri Foto
+          </h2>
           <div className="w-24 h-1 bg-gradient-to-r from-primary-600 to-secondary-500 mx-auto mt-4 rounded-full"></div>
         </div>
 
@@ -770,7 +841,11 @@ function GallerySection({
               }`}
               onClick={() => setSelectedPhoto(index)}
             >
-              <div className={`relative rounded-xl overflow-hidden shadow-lg ${index % 3 === 0 ? "h-64" : "h-32"}`}>
+              <div
+                className={`relative rounded-xl overflow-hidden shadow-lg ${
+                  index % 3 === 0 ? "h-64" : "h-32"
+                }`}
+              >
                 <Image
                   src={photo || "/placeholder.svg"}
                   alt={`Wedding Photo ${index + 1}`}
@@ -791,7 +866,7 @@ function GallerySection({
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function LocationSection() {
@@ -813,14 +888,18 @@ function LocationSection() {
           <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-primary-600 to-secondary-500 rounded-full flex items-center justify-center">
             <MapPin className="w-8 h-8 text-white" />
           </div>
-          <h2 className="text-4xl font-bold text-primary-600 font-serif">Lokasi Acara</h2>
+          <h2 className="text-4xl font-bold text-primary-600 font-serif">
+            Lokasi Acara
+          </h2>
           <div className="w-24 h-1 bg-gradient-to-r from-primary-600 to-secondary-500 mx-auto mt-4 rounded-full"></div>
         </div>
 
         <div className="space-y-6">
           <div className="bg-gradient-to-br from-cyan-50 to-teal-50 rounded-2xl p-6 shadow-lg border border-secondary-200 backdrop-blur-sm bg-white/80 transform hover:scale-105 transition-all duration-300">
             <div className="text-center mb-4">
-              <h3 className="text-2xl font-bold text-primary-600 mb-2">Villa D'LAFISHA</h3>
+              <h3 className="text-2xl font-bold text-primary-600 mb-2">
+                Villa D'LAFISHA
+              </h3>
               <p className="text-gray-700 leading-relaxed">
                 Kp. Cijagung Desa Gede Pangrango
                 <br />
@@ -857,7 +936,7 @@ function LocationSection() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function CoInvitationSection() {
@@ -879,7 +958,9 @@ function CoInvitationSection() {
           <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-r from-primary-600 to-secondary-500 rounded-full flex items-center justify-center">
             <UserCheck className="w-8 h-8 text-white" />
           </div>
-          <h2 className="text-4xl font-bold text-primary-600 font-serif">Turut Mengundang</h2>
+          <h2 className="text-4xl font-bold text-primary-600 font-serif">
+            Turut Mengundang
+          </h2>
           <div className="w-24 h-1 bg-gradient-to-r from-primary-600 to-secondary-500 mx-auto mt-4 rounded-full"></div>
         </div>
 
@@ -907,14 +988,19 @@ function CoInvitationSection() {
         <div className="text-center space-y-6">
           <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-secondary-200">
             <p className="text-gray-700 leading-relaxed mb-4">
-              Merupakan suatu kehormatan dan kebahagiaan bagi kami, apabila Bapak/Ibu/Saudara/i berkenan hadir untuk
-              memberikan do'a restu kepada kedua mempelai.
+              Merupakan suatu kehormatan dan kebahagiaan bagi kami, apabila
+              Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan do'a restu
+              kepada kedua mempelai.
             </p>
 
-            <p className="text-primary-600 font-serif text-lg mb-4">Wassalamu'alaikum Warahmatullahi Wabarakatuh</p>
+            <p className="text-primary-600 font-serif text-lg mb-4">
+              Wassalamu'alaikum Warahmatullahi Wabarakatuh
+            </p>
 
             <div className="space-y-2">
-              <h3 className="text-xl font-bold text-primary-600 font-serif">Lutfhi & Indri</h3>
+              <h3 className="text-xl font-bold text-primary-600 font-serif">
+                Luthfi & Indri
+              </h3>
               <div className="text-gray-600 text-sm space-y-1">
                 <p>Keluarga Besar Bapak Asep Badrutamam & Ibu Heni Suarni</p>
                 <p>Keluarga Besar Bapak Isap Saprudin & Ibu Uu Yuningsih</p>
@@ -930,5 +1016,5 @@ function CoInvitationSection() {
         </div>
       </div>
     </div>
-  )
+  );
 }
