@@ -40,6 +40,7 @@ export const metadata: Metadata = {
     images: ["https://tasyakuran-indri-luthfi.vercel.app/thumbnail-il.jpg"],
   },
   manifest: "/manifest.json",
+    generator: 'v0.dev'
 }
 
 export default function RootLayout({
@@ -59,7 +60,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Lutfhi & Indri" />
         <link rel="preload" href="/images/hero-couple.jpg" as="image" />
-        <link rel="preload" href="/aminpalingserius.mp3" as="audio" />
+        <link rel="preload" href="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/aminpalingserius-fxje76yUJ5IsjQHiVv7fWzsxI6ayXf.mp3" as="audio" />
       </head>
       <body className={inter.className}>
         {children}

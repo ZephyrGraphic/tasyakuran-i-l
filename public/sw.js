@@ -16,7 +16,7 @@ const urlsToCache = [
   "/images/gallery-5.jpg",
   "/images/gallery-6.jpg",
   "/images/floral-element.png",
-  "/aminpalingserius.mp3",
+  "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/aminpalingserius-fxje76yUJ5IsjQHiVv7fWzsxI6ayXf.mp3",
   "/_next/static/css/app/layout.css",
   "/_next/static/chunks/webpack.js",
   "/_next/static/chunks/main.js",

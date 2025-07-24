@@ -224,7 +224,7 @@ export default function WeddingInvitation() {
         )}
         {/* Background Audio */}
         <audio ref={audioRef} loop>
-          <source src="/aminpalingserius.mp3" type="audio/mpeg" />
+          <source src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/aminpalingserius-fxje76yUJ5IsjQHiVv7fWzsxI6ayXf.mp3" type="audio/mpeg" />
         </audio>
 
         <div className="absolute inset-0">
@@ -300,7 +300,7 @@ export default function WeddingInvitation() {
       )}
       {/* Background Audio */}
       <audio ref={audioRef} loop>
-        <source src="/aminpalingserius.mp3" type="audio/mpeg" />
+        <source src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/aminpalingserius-fxje76yUJ5IsjQHiVv7fWzsxI6ayXf.mp3" type="audio/mpeg" />
       </audio>
 
       {/* Section Content with Transition */}
