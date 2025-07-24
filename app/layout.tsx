@@ -40,7 +40,6 @@ export const metadata: Metadata = {
     images: ["https://tasyakuran-indri-luthfi.vercel.app/thumbnail-il.jpg"],
   },
   manifest: "/manifest.json",
-    generator: 'v0.dev'
 }
 
 export default function RootLayout({
@@ -51,16 +50,70 @@ export default function RootLayout({
   return (
     <html lang="id">
       <head>
+        {/* Basic Meta Tags */}
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+        <meta name="theme-color" content="#143a45" />
+
+        {/* PWA Meta Tags */}
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/favicon.png" sizes="any" />
         <link rel="apple-touch-icon" href="/favicon.png" />
-        <meta name="theme-color" content="#143a45" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Lutfhi & Indri" />
+
+        {/* Enhanced OpenGraph Meta Tags for WhatsApp */}
+        <meta property="og:title" content="Tasyakuran Pernikahan Lutfhi & Indri" />
+        <meta
+          property="og:description"
+          content="Dengan penuh sukacita, kami mengundang Bapak/Ibu/Saudara/i untuk hadir dalam acara Tasyakuran Pernikahan Lutfhi Farhan Maulana & Indri Ramdani pada Kamis, 31 Juli 2025 di Villa D'LAFISHA, Sukabumi."
+        />
+        <meta property="og:image" content="https://tasyakuran-indri-luthfi.vercel.app/thumbnail-il.jpg" />
+        <meta property="og:image:secure_url" content="https://tasyakuran-indri-luthfi.vercel.app/thumbnail-il.jpg" />
+        <meta property="og:image:type" content="image/jpeg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Tasyakuran Pernikahan Lutfhi & Indri - 31 Juli 2025" />
+        <meta property="og:url" content="https://tasyakuran-indri-luthfi.vercel.app" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Tasyakuran Pernikahan Lutfhi & Indri" />
+        <meta property="og:locale" content="id_ID" />
+
+        {/* Twitter Card Meta Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Tasyakuran Pernikahan Lutfhi & Indri" />
+        <meta
+          name="twitter:description"
+          content="Dengan penuh sukacita, kami mengundang Bapak/Ibu/Saudara/i untuk hadir dalam acara Tasyakuran Pernikahan Lutfhi Farhan Maulana & Indri Ramdani pada Kamis, 31 Juli 2025 di Villa D'LAFISHA, Sukabumi."
+        />
+        <meta name="twitter:image" content="https://tasyakuran-indri-luthfi.vercel.app/thumbnail-il.jpg" />
+        <meta name="twitter:image:alt" content="Tasyakuran Pernikahan Lutfhi & Indri - 31 Juli 2025" />
+
+        {/* WhatsApp Specific Meta Tags */}
+        <meta property="og:image:url" content="https://tasyakuran-indri-luthfi.vercel.app/thumbnail-il.jpg" />
+        <meta name="image" content="https://tasyakuran-indri-luthfi.vercel.app/thumbnail-il.jpg" />
+        <meta name="thumbnail" content="https://tasyakuran-indri-luthfi.vercel.app/thumbnail-il.jpg" />
+
+        {/* Additional Meta Tags for Better Compatibility */}
+        <meta name="author" content="Lutfhi & Indri" />
+        <meta name="robots" content="index, follow" />
+        <meta name="googlebot" content="index, follow" />
+        <meta name="bingbot" content="index, follow" />
+        <meta name="slurp" content="index, follow" />
+
+        {/* Canonical URL */}
+        <link rel="canonical" href="https://tasyakuran-indri-luthfi.vercel.app" />
+
+        {/* Preload Critical Resources */}
         <link rel="preload" href="/images/hero-couple.jpg" as="image" />
-        <link rel="preload" href="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/aminpalingserius-fxje76yUJ5IsjQHiVv7fWzsxI6ayXf.mp3" as="audio" />
+        <link rel="preload" href="/thumbnail-il.jpg" as="image" />
+        <link rel="preload" href="/aminpalingserius.mp3" as="audio" />
+
+        {/* DNS Prefetch */}
+        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="//maps.googleapis.com" />
+        <link rel="dns-prefetch" href="//calendar.google.com" />
       </head>
       <body className={inter.className}>
         {children}
